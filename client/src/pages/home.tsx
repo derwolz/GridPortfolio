@@ -90,14 +90,30 @@ export default function Home() {
     switch (activeSection) {
       case "projects":
         return (
-          <div className="flex-1 flex items-center justify-center p-8">
-            <div className="flex gap-6 max-w-6xl w-full">
+          <div className="projects-container">
+            <div className="projects-grid">
               {projects.map((project, index) => (
                 <motion.div
                   key={project.id}
                   className={`project-slot ${activatedProjects.has(project.id) ? 'activated' : ''}`}
-                  onHoverStart={() => setSelectedProject(project.id)}
-                  onHoverEnd={() => setSelectedProject(null)}
+                  onHoverStart={() => {
+                    // Only trigger hover on non-touch devices
+                    if (window.matchMedia('(hover: hover)').matches) {
+                      setSelectedProject(project.id);
+                    }
+                  }}
+                  onHoverEnd={() => {
+                    if (window.matchMedia('(hover: hover)').matches) {
+                      setSelectedProject(null);
+                    }
+                  }}
+                  onTap={() => {
+                    // For touch devices, briefly show preview before opening
+                    if (!window.matchMedia('(hover: hover)').matches) {
+                      setSelectedProject(project.id);
+                      setTimeout(() => setSelectedProject(null), 200);
+                    }
+                  }}
                   onClick={() => {
                     setViewingProject(project.id);
                     setActivatedProjects(prev => {

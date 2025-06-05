@@ -50,11 +50,71 @@
     color: white;
   }
 
+  @media (max-width: 768px) {
+    .gaming-interface {
+      height: 100vh;
+      height: 100dvh; /* Dynamic viewport height for mobile */
+      position: relative;
+      overflow: hidden;
+    }
+  }
+
   .main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     position: relative;
+    min-height: 0;
+  }
+
+  /* Mobile-friendly scrolling container */
+  .projects-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .projects-grid {
+    display: flex;
+    gap: 1.5rem;
+    max-width: 96rem;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @media (max-width: 768px) {
+    .projects-container {
+      padding: 1rem 0.5rem;
+      max-height: calc(100vh - 70px);
+      max-height: calc(100dvh - 70px);
+    }
+
+    .projects-grid {
+      gap: 2rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .projects-container {
+      padding: 0.5rem 0;
+      max-height: calc(100vh - 60px);
+      max-height: calc(100dvh - 60px);
+    }
+
+    .projects-grid {
+      gap: 1.5rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 
   .project-slot {
@@ -63,6 +123,22 @@
     position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
+    scroll-snap-align: center;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .project-slot {
+      width: 280px;
+      height: 400px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .project-slot {
+      width: 250px;
+      height: 360px;
+    }
   }
 
   .slot-background {
@@ -102,6 +178,18 @@
     text-shadow: 0 2px 4px rgba(0,0,0,0.8);
   }
 
+  @media (max-width: 768px) {
+    .slot-content {
+      padding: 25px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .slot-content {
+      padding: 20px;
+    }
+  }
+
   .slot-label {
     font-size: 12px;
     font-weight: 600;
@@ -126,6 +214,39 @@
     text-transform: uppercase;
   }
 
+  @media (max-width: 768px) {
+    .slot-label {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .slot-number {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .slot-action {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .slot-label {
+      font-size: 12px;
+      margin-bottom: 10px;
+      letter-spacing: 0.8px;
+    }
+
+    .slot-number {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .slot-action {
+      font-size: 10px;
+    }
+  }
+
   .project-slot:hover {
     transform: translateY(-8px) scale(1.05);
   }
@@ -133,6 +254,29 @@
   .project-slot:hover .slot-background {
     border-color: rgba(255, 215, 0, 0.6);
     box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2);
+  }
+
+  /* Touch-friendly adjustments */
+  @media (hover: none) and (pointer: coarse) {
+    .project-slot:hover {
+      transform: none;
+    }
+    
+    .project-slot:active {
+      transform: scale(0.95);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .project-slot:hover {
+      transform: translateY(-4px) scale(1.02);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .project-slot:hover {
+      transform: translateY(-2px) scale(1.01);
+    }
   }
 
   .project-slot.activated {
@@ -162,12 +306,46 @@
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(10px);
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
   }
 
   .menu-container {
     display: flex;
     gap: 40px;
     align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .bottom-menu {
+      height: 70px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .menu-container {
+      gap: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .bottom-menu {
+      height: 60px;
+      padding: 0 10px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .menu-container {
+      gap: 10px;
+      width: 100%;
+      justify-content: space-around;
+    }
   }
 
   .menu-button {
@@ -182,6 +360,19 @@
     color: rgba(255, 255, 255, 0.7);
     transition: all 0.3s ease;
     cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .menu-button {
+      padding: 10px 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .menu-button {
+      padding: 8px 12px;
+      gap: 2px;
+    }
   }
 
   .menu-button:hover {
@@ -205,6 +396,19 @@
     font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .menu-label {
+      font-size: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .menu-label {
+      font-size: 9px;
+      letter-spacing: 0.3px;
+    }
   }
 
   .massive-title {
@@ -423,6 +627,7 @@
   @media (max-width: 768px) {
     .project-detail-content {
       padding: 40px 20px;
+      overflow-y: auto;
     }
 
     .project-title {
@@ -435,6 +640,80 @@
       width: 40px;
       height: 40px;
       font-size: 20px;
+    }
+
+    .project-full-description {
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .project-features h3,
+    .project-technologies h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .project-features li {
+      font-size: 14px;
+    }
+
+    .tech-tag {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .project-detail-content {
+      padding: 20px 15px;
+    }
+
+    .project-title {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+
+    .close-button {
+      top: 15px;
+      right: 15px;
+      width: 35px;
+      height: 35px;
+      font-size: 18px;
+    }
+
+    .project-category {
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .project-full-description {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .project-features,
+    .project-technologies {
+      margin-bottom: 20px;
+    }
+
+    .project-features h3,
+    .project-technologies h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .project-features li {
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .tech-tags {
+      gap: 8px;
+    }
+
+    .tech-tag {
+      padding: 4px 8px;
+      font-size: 11px;
     }
   }
 
