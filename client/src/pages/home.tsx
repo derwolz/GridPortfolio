@@ -1,59 +1,85 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Code, Mail, Home as HomeIcon } from "lucide-react";
+import { User, Code, Mail, Home as HomeIcon, ExternalLink, Menu, X  } from "lucide-react";
 
 export default function Home() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState("home");
+  const [activeSection, setActiveSection] = useState("projects");
   const [viewingProject, setViewingProject] = useState<string | null>(null);
   const [hasStarted, setHasStarted] = useState(false);
   const [activatedProjects, setActivatedProjects] = useState<Set<string>>(new Set());
 
+const [isUserScrolling, setIsUserScrolling] = useState(false);
+const [featureScrollTop, setFeatureScrollTop] = useState(0);
+const featureContainerRef = useRef(null);
+const scrollTimeoutRef = useRef(null);
+const animationRef = useRef(null);
+
+ const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const projects = [
     {
       id: "edison-ai",
       title: "EdisonAI",
       category: "AI • Machine Learning",
       description: "Advanced AI-powered platform for intelligent automation and decision-making processes.",
-      fullDescription: "EdisonAI represents the cutting edge of artificial intelligence and machine learning technology. This comprehensive platform provides businesses with intelligent automation capabilities, predictive analytics, and decision-making tools that revolutionize how organizations operate. Built with scalability in mind, EdisonAI processes vast amounts of data in real-time, delivering actionable insights that drive growth and efficiency.",
-      image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-      technologies: ["Python", "TensorFlow", "React", "Docker", "AWS", "PostgreSQL"],
-      features: ["Real-time Analytics", "Predictive Modeling", "Automated Workflows", "Custom AI Models"],
+      fullDescription: "EdisonAI is a comprehensive AI platform that democratizes artificial intelligence development through an intuitive visual workflow builder. The company provides a no-code/low-code solution that enables users to create sophisticated AI systems using a drag-and-drop interface, making AI development accessible to non-technical users while maintaining the flexibility needed for complex implementations.",
+      url:"https://edison-ai.com",
+      image: "/assets/edisonaibg.png",
+      charImage: "/assets/edisonaichar.png",
+      technologies: ["ExpressJS","React", "PostgreSQL", "ChatGPT", "FireWorksAI", "Replicate"],
+      features: ["Live Data Streaming", "Test Planning",  "Automated Workflows","UX/UI", "AI integrations"],
     },
     {
       id: "grey-pulse",
       title: "Grey Pulse",
       category: "Web App • Analytics",
       description: "Real-time analytics dashboard with advanced data visualization and monitoring capabilities.",
-      fullDescription: "Grey Pulse is a sophisticated analytics platform that transforms raw data into beautiful, actionable insights. With its intuitive dashboard interface and powerful visualization engine, users can monitor key metrics, track performance trends, and make data-driven decisions with confidence. The platform supports real-time data streaming and offers customizable widgets for different business needs.",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-      technologies: ["Vue.js", "Node.js", "D3.js", "WebSocket", "MongoDB", "Redis"],
-      features: ["Live Data Streaming", "Custom Dashboards", "Interactive Charts", "Export Capabilities"],
+      fullDescription: "GreyPulse is pioneering the next generation of legal technology through advanced AI agents powered by large language models (LLMs). We're building intelligent legal assistants that don't just answer questions—they actively solve complex legal problems, automate workflows, and enhance the strategic capabilities of legal professionals.",
+      url:"https://greypulse.io",
+      charImage: "/assets/greypulsechar.png",
+      image: "/assets/greypulsebg.png",
+
+      technologies: ["React", "ExpressJS", "WebSockets", "MongoDB"],
+      features: ["Automation", "Bot Building", "Integrations", "Website Design", "Decision Tree Creation"],
     },
     {
       id: "valkyrie-x-truck",
       title: "Valkyrie X Truck",
-      category: "Design • 3D Modeling",
-      description: "Futuristic truck design concept featuring advanced aerodynamics and sustainable technology.",
-      fullDescription: "The Valkyrie X Truck represents the future of sustainable transportation. This revolutionary design concept combines cutting-edge aerodynamics with eco-friendly technology to create a vehicle that's both visually striking and environmentally conscious. Every curve and surface has been meticulously crafted to reduce drag while maintaining the rugged functionality expected from commercial vehicles.",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-      technologies: ["Blender", "AutoCAD", "3D Design", "Photoshop", "KeyShot"],
-      features: ["Aerodynamic Design", "Sustainable Materials", "Autonomous Capabilities", "Electric Powertrain"],
+      category: "Web App • Book",
+      description: "Book Website",
+      fullDescription: "Promotional website for the upcoming novel \"Valkyrie X Truck,\" creating an immersive digital experience that captures the book's unique blend of anime and modern aesthetics.",
+      image: "/assets/valkyriebg.png",
+      charImage: "/assets/valkyriechar.png",
+      url:"https://valkyriextruck.com",
+      technologies: ["Svelte", "ComfyUI", "MdSvex", "Ngnix" ],
+      features: [
+        "Marketing", "Writing", "Copywrite", "Image Generation", "Video Generation"
+      ],
     },
     {
       id: "sirened",
       title: "Sirened",
-      category: "Audio • Mobile App",
-      description: "Advanced audio processing platform with real-time sound manipulation and effects.",
-      fullDescription: "Sirened is a revolutionary audio processing application that puts professional-grade sound manipulation tools in the palm of your hand. Whether you're a music producer, sound designer, or audio enthusiast, Sirened provides an extensive suite of real-time effects and processing capabilities that were previously only available in expensive studio equipment.",
-      image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-      technologies: ["React Native", "Web Audio API", "DSP", "Core Audio", "FFT"],
-      features: ["Real-time Effects", "Multi-track Recording", "Cloud Sync", "Professional Export"],
+      category: "Web App • Analytics",
+      description: "Book Recommendation service.",
+      fullDescription: "Sirened is a book discovery marketplace that serves as a centralized hub where authors can showcase their books and direct readers to their personal websites. The platform functions as a sophisticated book directory with integrated analytics, allowing authors to list their works, track visitor engagement, and monitor referral traffic to their sites. Built to bridge the gap between readers seeking new books and authors looking to expand their audience, Sirened provides valuable insights into book discovery patterns and reader behavior through comprehensive analytics dashboards.",
+      image: "/assets/sirenedbg.jpeg",
+      charImage: "/assets/sirenedchar.png",
+      github: "https://github.com/stankysite",
+      url: "https://sirened.com",
+       technologies: ["React", "PostgreSQL", "Chart.js", "Semantic Analysis", "Topic Analysis"  ],
+      features: [
+    "Custom Author Dashboards", 
+    "Interactive Reader Metrics",
+    "Book Performance Tracking",
+    "Reader Engagement Insights",
+    "Genre Trend Analysis",
+    "Reporting Tools",
+    "Author Portfolio Management"
+  ],
     }
   ];
 
   const menuItems = [
-    { id: "home", label: "HOME", icon: HomeIcon },
     { id: "projects", label: "PROJECTS", icon: Code },
     { id: "about", label: "ABOUT", icon: User },
     { id: "contact", label: "CONTACT", icon: Mail },
@@ -85,12 +111,25 @@ export default function Home() {
       window.removeEventListener('click', handleClick);
     };
   }, [hasStarted]);
-
+  const handleMenuItemClick = (itemId) => {
+    setActiveSection(itemId);
+    setViewingProject(null);
+    if (!hasStarted) setHasStarted(true);
+    setIsMobileMenuOpen(false); // Close mobile menu after selection
+  };
+  const handleResumeDownload = () =>{
+    const newTab = window.open('/assets/Blaine Wolz Resume.pdf', '_blank');
+    console.log(newTab)
+    if (newTab) {
+      newTab.focus(); // Focuses the new tab if popup blockers don't interfere
+    }
+  }
   const renderContent = () => {
     switch (activeSection) {
       case "projects":
         return (
           <div className="projects-container">
+
             <div className="projects-grid">
               {projects.map((project, index) => (
                 <motion.div
@@ -123,7 +162,7 @@ export default function Home() {
                     });
                   }}
                   initial={{ opacity: 0, y: 100 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  animate={{ opacity: 1, y: index % 2 === 0 ? 0 : 60, x: index % 2 === 0 ? 0 : -20 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <div className="slot-background">
@@ -131,7 +170,7 @@ export default function Home() {
                       {(selectedProject === project.id || activatedProjects.has(project.id)) && (
                         <motion.div
                           className="project-image-overlay"
-                          style={{ backgroundImage: `url(${project.image})` }}
+                          style={{ backgroundImage: `url(/assets/bg${index}.png)`  }}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 0.8 }}
                           exit={{ opacity: 0 }}
@@ -141,29 +180,47 @@ export default function Home() {
                     </AnimatePresence>
                   </div>
                   <div className="slot-content">
-                    <div className="slot-label">
-                      {(selectedProject === project.id || activatedProjects.has(project.id)) ? project.category : "PRESS"}
+                    <div className="slot-image">
+                      {(selectedProject === project.id || activatedProjects.has(project.id)) ? 
+                      <img className="char-image" src={`${project.charImage}`} alt={`${project.description}`}/>
+                      : null}
                     </div>
-                    <div className="slot-number">
-                      {(selectedProject === project.id || activatedProjects.has(project.id)) ? project.title : "O"}
+                    {
+                      (selectedProject === project.id || activatedProjects.has(project.id)) 
+                      ? 
+                    <div className="slot-text">
+                      <div className="slot-label">
+                            {project.category}
+                      </div>
+                      <div className="slot-number">
+                        {project.title}
+                      </div>
                     </div>
-                    <div className="slot-action">
-                      {activatedProjects.has(project.id) 
-                        ? (selectedProject === project.id ? "CLICK TO VIEW" : "CLICK TO VIEW")
-                        : (selectedProject === project.id ? "CLICK TO VIEW" : "TO JOIN")
-                      }
-                    </div>
+
+
+                      :
+                        <>
+                      <div className="">
+                          Click
+                      </div>
+                      <div className="slot-action">
+                                TO JOIN
+                        
+                      </div>
+
+                      </>
+                    }
                   </div>
                 </motion.div>
               ))}
               
               {/* Coming soon slots */}
-              {[1, 2].map((slot) => (
+              {[0].map((slot) => (
                 <motion.div
                   key={`coming-${slot}`}
                   className="project-slot opacity-60"
                   initial={{ opacity: 0, y: 100 }}
-                  animate={{ opacity: 0.6, y: 0 }}
+                  animate={{ opacity: 0.6, y: slot % 2 === 0 ? 0 : 60, x: slot % 2 === 0 ? 0: -20 }}
                   transition={{ duration: 0.5, delay: (projects.length + slot - 1) * 0.1 }}
                 >
                   <div className="slot-background" />
@@ -175,6 +232,7 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
+
           </div>
         );
       
@@ -186,15 +244,29 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <h1 className="text-5xl font-bold mb-6">Creative Developer</h1>
+              <h1 className="text-5xl font-bold mb-6">Product Developer</h1>
               <p className="text-xl text-gray-300 mb-8">
-                Passionate developer and designer creating innovative digital experiences across multiple technologies.
+                Passionate developer and creator crafting innovative digital experiences across multiple technologies.
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {["Frontend", "Backend", "Mobile", "AI/ML"].map((skill) => (
+                {["Full Stack", "Design", "Innovation", "Analysis"].map((skill) => (
                   <div key={skill} className="bg-black/50 p-4 rounded-lg border border-gray-700">
                     <div className="text-primary font-semibold">{skill}</div>
                   </div>
+                ))}
+              </div>
+              <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+                {["Bachelor's CS", "ITIL IV", "Project+", "MBA"].map((skill) => (
+                  <div key={skill} className="bg-white/50 p-4 rounded-lg border border-gray-700">
+                    <div className="text-black/90 font-semibold">{skill}</div>
+                  </div>
+                ))}
+              </div>
+           <div className="mt-6 ">
+                {["Download Resume"].map((skill) => (
+                  <button onClick={handleResumeDownload} key={skill} className="w-full bg-black/50 hover:bg-black/70 p-4 rounded-lg border border-gray-700">
+                    <span className="text-primary font-semibold">{skill}</span>
+                  </button>
                 ))}
               </div>
             </motion.div>
@@ -215,13 +287,10 @@ export default function Home() {
               </p>
               <div className="space-y-4">
                 <div className="bg-black/50 p-4 rounded-lg border border-gray-700">
-                  <div className="text-primary">hello@portfolio.dev</div>
+                  <div className="text-primary">der.wolz@gmail.com</div>
                 </div>
                 <div className="bg-black/50 p-4 rounded-lg border border-gray-700">
-                  <div className="text-primary">+1 (555) 123-4567</div>
-                </div>
-                <div className="bg-black/50 p-4 rounded-lg border border-gray-700">
-                  <div className="text-primary">San Francisco, CA</div>
+                  <div className="text-primary">Baker City, Or</div>
                 </div>
               </div>
             </motion.div>
@@ -272,7 +341,84 @@ export default function Home() {
 
   const currentProject = viewingProject ? projects.find(p => p.id === viewingProject) : null;
 
-  return (
+    const startAutoScroll = () => {
+      if (isUserScrolling || !featureContainerRef.current) return;
+
+      const scroll = () => {
+        if (isUserScrolling) return;
+        
+        setFeatureScrollTop(prev => {
+          const container = featureContainerRef.current;
+          if (!container) return prev;
+          
+          const itemHeight = container.scrollHeight / container.children.length;
+          const maxScroll = itemHeight * (container.children.length / 2); // Half because we duplicate
+          
+          let newScrollTop = prev + 0.5; // Adjust speed here (pixels per frame)
+          
+          // Reset to top when we've scrolled past the original items
+          if (newScrollTop >= maxScroll) {
+            newScrollTop = 0;
+          }
+          
+          container.scrollTop = newScrollTop;
+          return newScrollTop;
+        });
+        
+        animationRef.current = requestAnimationFrame(scroll);
+      };
+      
+      animationRef.current = requestAnimationFrame(scroll);
+    };
+
+    const stopAutoScroll = () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+
+    const handleFeatureMouseEnter = () => {
+      setIsUserScrolling(true);
+      stopAutoScroll();
+    };
+
+    const handleFeatureMouseLeave = () => {
+      setIsUserScrolling(false);
+      // Small delay before restarting auto-scroll
+      scrollTimeoutRef.current = setTimeout(() => {
+        startAutoScroll();
+      }, 500);
+    };
+
+    const handleFeatureScroll = (e) => {
+      if (!isUserScrolling) return;
+      
+      // Clear any pending restart timeout
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      // Update our tracked scroll position when user scrolls
+      setFeatureScrollTop(e.target.scrollTop);
+    };
+
+    // 4. ADD THIS useEffect AFTER YOUR EXISTING useEffect (around line 115)
+    useEffect(() => {
+      if (viewingProject) {
+        startAutoScroll();
+      } else {
+        stopAutoScroll();
+      }
+      
+      return () => {
+        stopAutoScroll();
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
+        }
+      };
+    }, [viewingProject, isUserScrolling]);
+
+   return (
     <div className="gaming-interface">
       {/* Main content area */}
       <main className="main-content">
@@ -303,7 +449,7 @@ export default function Home() {
             >
               <div 
                 className="project-background"
-                style={{ backgroundImage: `url(${currentProject.image})` }}
+                style={{backgroundImage: `url(${currentProject.image})`}}
               />
               <div className="project-detail-content">
                 <button
@@ -317,13 +463,24 @@ export default function Home() {
                   <div className="project-category">{currentProject.category}</div>
                   <h1 className="project-title">{currentProject.title}</h1>
                   <p className="project-full-description">{currentProject.fullDescription}</p>
-                  
+                  <a href={`${currentProject.url}`}><span className="web-link">Visit The Website <ExternalLink/></span></a>
                   <div className="project-features">
                     <h3>Key Features</h3>
-                    <ul>
-                      {currentProject.features.map((feature, index) => (
-                        <li key={index}>{feature}</li>
-                      ))}
+                    <ul 
+                      ref={featureContainerRef}
+                      className="key-features"
+                      onMouseEnter={handleFeatureMouseEnter}
+                      onMouseLeave={handleFeatureMouseLeave}
+                      onScroll={handleFeatureScroll}
+                    >
+                     {isUserScrolling 
+      ? currentProject.features.map((feature, index) => (
+          <li key={index}>{feature}</li>
+        ))
+      : [...currentProject.features, ...currentProject.features].map((feature, index) => (
+          <li key={index}>{feature}</li>
+        ))
+    }
                     </ul>
                   </div>
                   
@@ -344,29 +501,26 @@ export default function Home() {
 
       {/* Bottom gaming menu */}
       <AnimatePresence>
-        {hasStarted && (
+        {(
           <motion.nav 
-            className="bottom-menu"
+            className="bottom-menu flex flex-row justify-between"
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
+            <div className="pl-8 name-div text-xl font-bold  ">
+              <span>Blaine Wolz</span>
+            </div>
             <div className="menu-container">
               {menuItems.map((item, index) => (
                 <motion.button
                   key={item.id}
                   className={`menu-button ${activeSection === item.id ? 'active' : ''}`}
                   onClick={() => {
-                    if (item.id === "home") {
-                      setHasStarted(false);
-                      setActiveSection("home");
-                      setViewingProject(null);
-                    } else {
                       setActiveSection(item.id);
                       setViewingProject(null);
                       if (!hasStarted) setHasStarted(true);
-                    }
                   }}
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -379,7 +533,72 @@ export default function Home() {
                 </motion.button>
               ))}
             </div>
+            <div className="w-[11ch]"></div>
           </motion.nav>
+        )}
+      </AnimatePresence>
+      {/* Mobile Hamburger Button */}
+      <motion.button
+        className="hamburger-button mobile-only"
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </motion.button>
+ {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="mobile-menu-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            
+            {/* Mobile Menu */}
+            <motion.nav
+              className="mobile-menu"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+            >
+              <div className="mobile-menu-header">
+                <h2 className="text-xl font-bold text-white">Portfolio Blaine Wolz</h2>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="close-button"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              
+              <div className="mobile-menu-items">
+                {menuItems.map((item, index) => (
+                  <motion.button
+                    key={item.id}
+                    className={`mobile-menu-button ${activeSection === item.id ? 'active' : ''}`}
+                    onClick={() => handleMenuItemClick(item.id)}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <item.icon className="mobile-menu-icon" size={24} />
+                    <span className="mobile-menu-label">{item.label}</span>
+                  </motion.button>
+                ))}
+              </div>
+            </motion.nav>
+          </>
         )}
       </AnimatePresence>
     </div>
